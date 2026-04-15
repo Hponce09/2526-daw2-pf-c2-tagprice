@@ -4,10 +4,11 @@ include_once PATH_BASE . 'includes/db_connect.php';
 
 // Cambios realizados: INTEGER PRIMARY KEY AUTOINCREMENT (en ese orden)
 $sqlCreateUser = 'CREATE TABLE IF NOT EXISTS users (
-    usu_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usu_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     usu_mail VARCHAR(50) NOT NULL UNIQUE,
     usu_password VARCHAR(255) NOT NULL,
-    usu_name VARCHAR(200) NOT NULL
+    usu_name VARCHAR(200) NOT NULL,
+    usu_rol TEXT NOT NULL DEFAULT "user" -- Por defecto, todos son usuarios
 );';
 
 $sqlCreateProduct = 'CREATE TABLE IF NOT EXISTS product (
@@ -44,10 +45,10 @@ $sqlCreateHistorialPrecios = 'CREATE TABLE IF NOT EXISTS price_history (
 );';
 
 // El Insert (Asegúrate de que las tablas existan antes de insertar)
-$sqlInsertUsers = 'INSERT INTO users (usu_mail, usu_password, usu_name) VALUES 
-("admin@test.com", "$2a$12$Y4vF1Yw9iYg/PdfdpjXVMueQ.iIqFNRiVcCUjRrXbwTsz4n87NlfC", "Administrador"),
-("user1@gmail.com", "$2a$12$9.Zef0W/gLBkbb3B5eBMS.dCu3/FEIuBvTEhh/p8cN.XEw6O2turC", "Juan Pérez"),
-("test_girl@hotmail.com", "$2a$12$L.emdXPIWVFWKN2GQDm/PufypJXyRVXXF0lq6TwcCWNLHgArNMJHG", "María García");';
+$sqlInsertUsers = 'INSERT INTO users (usu_mail, usu_password, usu_name, usu_rol) VALUES 
+("admin@test.com", "$2a$12$dwNzvtVZQT2RTIfRd8ZS7efGZtH3lbJSY6mbA2uN.klyEBdQElVAy", "Administrador", "admin"),
+("user1@gmail.com", "$2a$12$Uz43.QaQePRviQGWolv8S.yNbGQyZ00CrbZ4VqWmLTKdwXCR.ShhK", "Juan Pérez", "user"),
+("test_girl@hotmail.com", "$2a$12$5MtTooQ391AoM9zs41muvuxtQU9G.s7m98b5LARCN435nJblR0rRW", "María García", "user");';
 
 if($db != null){
     try {

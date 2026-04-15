@@ -1,8 +1,4 @@
 <?php
-include __DIR__ . '/config/paths.php';
-include PATH_BASE . 'includes/db_connect.php';
-
-include PATH_BASE . 'database/dbInit.php';
 
 echo "<h1>¡Docker funcionando!</h1>";
 

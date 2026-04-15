@@ -3,10 +3,11 @@ USE anti_inflacion;
 
 -- 1. TABLA DE USUARIOS
 CREATE TABLE IF NOT EXISTS users (
-    usu_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+    usu_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     usu_mail VARCHAR(50) NOT NULL UNIQUE,
     usu_password VARCHAR(255) NOT NULL,
-    usu_name VARCHAR(200) NOT NULL
+    usu_name VARCHAR(200) NOT NULL,
+    usu_rol TEXT NOT NULL DEFAULT 'user' -- Por defecto, todos son usuarios
 );
 
 -- 2. TABLA DE PRODUCTOS (Info general)
@@ -47,7 +48,7 @@ CREATE TABLE IF NOT EXISTS price_history (
 );
 
 -- usuarios
-INSERT INTO users (usu_mail, usu_password, usu_name) VALUES 
-('admin@test.com', 'admin123', 'Administrador'),
-('user1@gmail.com', 'user123', 'Juan Pérez'),
-('test_girl@hotmail.com', 'chica123', 'María García');
+INSERT INTO users (usu_mail, usu_password, usu_name, usu_rol) VALUES 
+('admin@test.com', 'admin123', 'Administrador', 'admin'),
+('user1@gmail.com', 'user123', 'Juan Pérez', 'user'),
+('test_girl@hotmail.com', 'chica123', 'María García', 'user');
