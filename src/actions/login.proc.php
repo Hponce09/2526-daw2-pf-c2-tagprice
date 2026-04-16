@@ -8,7 +8,7 @@ session_start();
 
 if(!empty($_REQUEST['usu_mail']) && !empty($_REQUEST['usu_password'])){
     $mail = $_REQUEST['usu_mail'];
-    $passwor = $_REQUEST['usu_password'];
+    $password = $_REQUEST['usu_password'];
 
     //echo $mail . "<br>";
     //echo $passwor;
@@ -27,7 +27,7 @@ $_SESSION['autenticated']= false;
 
 if($user){
 
-    if(password_verify($passwor,$user['usu_password'])){
+    if(password_verify($password,$user['usu_password'])){
         $_SESSION['autenticated']= true;
         $_SESSION['id_user'] = $user['usu_id'];
         $_SESSION['mail_user'] = $user['usu_mail'];
