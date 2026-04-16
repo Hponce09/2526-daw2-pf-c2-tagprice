@@ -1,12 +1,11 @@
 <?php
+require_once __DIR__ . '/config/paths.php';
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+
+include PATH_BASE .'includes/header.php';
 
 echo "<h1>¡Docker funcionando!</h1>";
 
-echo "Ruta del navegador (URL_BASE): ";
-var_dump(URL_BASE);
-
-echo "<br>Ruta del sistema (PATH_BASE): ";
-var_dump(PATH_BASE);
 
 //phpinfo();
 ?>
