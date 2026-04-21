@@ -1,77 +1,45 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
-import json
 import re
 
 def extraer_tienda_running():
-    if len(sys.argv) < 2:
-        print("Error: Sin URL;0.00")
-        return
-
     url = sys.argv[1]
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     
     try:
         response = requests.get(url, headers=headers, timeout=15)
-        if response.status_code != 200:
-            print(f"Error HTTP {response.status_code};0.00")
-            return
-
         soup = BeautifulSoup(response.text, 'html.parser')
-        nombre = ""
-        precio_final = "0.00"
-
-        # --- 1. EXTRAER NOMBRE (H1 estándar) ---
+        
+        # 1. NOMBRE
         h1 = soup.find("h1")
         nombre = h1.get_text().strip() if h1 else "Producto"
 
-        # --- 2. EXTRAER PRECIO REBAJADO (Estrategia de capas) ---
-        
-        # CAPA A: Buscar en etiquetas META (suelen tener el precio final que ve el usuario)
-        meta_price = soup.find("meta", property="product:price:amount") or \
-                     soup.find("meta", {"itemprop": "price"})
-        
-        if meta_price:
-            precio_final = meta_price.get("content", "0.00")
+        # 2. PRECIOS (La clave)
+        # Buscamos el precio actual (rebajado)
+        meta_actual = soup.find("meta", property="product:price:amount")
+        precio_rebajado = meta_actual.get("content") if meta_actual else "0.00"
 
-        # CAPA B: Si la capa A falla o da el precio viejo, buscamos el JSON LD
-        if precio_final == "0.00" or precio_final == "200": # Si detectamos que sigue en 200, intentamos mejorar
-            scripts = soup.find_all("script", type="application/ld+json")
-            for s in scripts:
-                try:
-                    data = json.loads(s.string)
-                    if isinstance(data, list): data = data[0]
-                    if data.get("@type") == "Product":
-                        offers = data.get("offers", {})
-                        if isinstance(offers, dict):
-                            precio_final = offers.get("price", precio_final)
-                        elif isinstance(offers, list):
-                            precio_final = offers[0].get("price", precio_final)
-                except: continue
+        # Buscamos el precio antiguo (el que suele estar tachado en PrestaShop)
+        precio_original = "0.00"
+        old_price_tag = soup.select_one('.regular-price, .old-price, .text-muted.line-through')
+        if old_price_tag:
+            match = re.search(r'\d+[.,]\d+', old_price_tag.get_text())
+            if match: precio_original = match.group().replace(',', '.')
+        else:
+            # Si no hay etiqueta de "precio viejo", el original es igual al rebajado
+            precio_original = precio_rebajado
 
-        # CAPA C: Búsqueda visual (por si las anteriores fallan o son el precio sin descuento)
-        # Buscamos el div o span que suele tener el precio actual en PrestaShop
-        selector_oferta = soup.select_one('.current-price span, [itemprop="price"], .product-price .current-price')
-        if selector_oferta:
-            texto_precio = selector_oferta.get_text()
-            # Extraemos el número (ej: "159,95 €" -> "159.95")
-            match = re.search(r'\d+[.,]\d+', texto_precio)
-            if match:
-                posible_precio = match.group().replace(',', '.')
-                # Si este precio es menor al que ya tenemos, es que hemos encontrado la rebaja
-                if float(posible_precio) < float(precio_final) or precio_final == "0.00":
-                    precio_final = posible_precio
+        # 3. IMAGEN
+        imagen = ""
+        meta_img = soup.find("meta", property="og:image")
+        imagen = meta_img.get("content") if meta_img else "https://via.placeholder.com/300"
 
-        # --- 3. LIMPIEZA FINAL ---
-        precio_final = str(precio_final).replace(',', '.').strip()
-        
-        print(f"{nombre};{precio_final}")
+        # DEVOLVEMOS 4 DATOS
+        print(f"{nombre};{precio_rebajado};{precio_original};{imagen}")
             
     except Exception as e:
-        print(f"Error de conexion;0.00")
+        print(f"Error;0.00;0.00;no_image.png")
 
 if __name__ == "__main__":
     extraer_tienda_running()
