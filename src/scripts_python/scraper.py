@@ -15,27 +15,33 @@ def extraer_tienda_running():
         h1 = soup.find("h1")
         nombre = h1.get_text().strip() if h1 else "Producto"
 
-        # 2. PRECIOS (La clave)
-        # Buscamos el precio actual (rebajado)
-        meta_actual = soup.find("meta", property="product:price:amount")
-        precio_rebajado = meta_actual.get("content") if meta_actual else "0.00"
-
-        # Buscamos el precio antiguo (el que suele estar tachado en PrestaShop)
+        # 2. PRECIOS (Afinando la puntería para TiendaRunning)
+        precio_rebajado = "0.00"
         precio_original = "0.00"
-        old_price_tag = soup.select_one('.regular-price, .old-price, .text-muted.line-through')
-        if old_price_tag:
-            match = re.search(r'\d+[.,]\d+', old_price_tag.get_text())
+
+        # Buscamos el precio actual (el que está en rosa/rojo en la web)
+        # En PrestaShop suele estar en un span con itemprop="price" o clase current-price
+        tag_actual = soup.select_one('.current-price span, [itemprop="price"]')
+        if tag_actual:
+            texto_actual = tag_actual.get_text()
+            match = re.search(r'\d+[.,]\d+', texto_actual)
+            if match: precio_rebajado = match.group().replace(',', '.')
+
+        # Buscamos el precio viejo (el que está tachado: 200,00 €)
+        tag_viejo = soup.select_one('.regular-price')
+        if tag_viejo:
+            texto_viejo = tag_viejo.get_text()
+            match = re.search(r'\d+[.,]\d+', texto_viejo)
             if match: precio_original = match.group().replace(',', '.')
         else:
-            # Si no hay etiqueta de "precio viejo", el original es igual al rebajado
+            # Si no hay precio viejo tachado, el original es el mismo que el actual
             precio_original = precio_rebajado
 
         # 3. IMAGEN
-        imagen = ""
         meta_img = soup.find("meta", property="og:image")
         imagen = meta_img.get("content") if meta_img else "https://via.placeholder.com/300"
 
-        # DEVOLVEMOS 4 DATOS
+        # Devolvemos: Nombre;Rebajado;Original;Imagen
         print(f"{nombre};{precio_rebajado};{precio_original};{imagen}")
             
     except Exception as e:
