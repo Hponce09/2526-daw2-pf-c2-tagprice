@@ -3,49 +3,86 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-def extraer_tienda_running():
+def extraer_datos():
+    if len(sys.argv) < 2:
+        print("Error;0.00;0.00;none")
+        return
+
     url = sys.argv[1]
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    # Headers más "humanos" para evitar que Atmosfera Sport nos bloquee
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+        "Accept-Language": "es-ES,es;q=0.9",
+        "Referer": "https://www.google.com/"
+    }
     
     try:
         response = requests.get(url, headers=headers, timeout=15)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # 1. NOMBRE
+        # 1. NOMBRE (Búsqueda multietiqueta)
+        nombre = "Producto"
         h1 = soup.find("h1")
-        nombre = h1.get_text().strip() if h1 else "Producto"
+        if h1:
+            nombre = h1.get_text().strip()
 
-        # 2. PRECIOS (Afinando la puntería para TiendaRunning)
+        # 2. PRECIO REBAJADO (EL QUE PAGAS)
         precio_rebajado = "0.00"
+        # Añadimos selectores para Atmosfera Sport (.current-price-value, .sales)
+        sel_rebajado = [
+            '.current-price-value', '.current-price', '.sales .price', 
+            '.pdp-product-price', '.price-item--sale', '[itemprop="price"]'
+        ]
+        for sel in sel_rebajado:
+            tag = soup.select_one(sel)
+            if tag:
+                texto = tag.get_text().replace(',', '.')
+                match = re.search(r'\d+[.]\d+', texto)
+                if match: 
+                    precio_rebajado = match.group()
+                    break
+
+        # 3. PRECIO ORIGINAL (TACHADO)
         precio_original = "0.00"
-
-        # Buscamos el precio actual (el que está en rosa/rojo en la web)
-        # En PrestaShop suele estar en un span con itemprop="price" o clase current-price
-        tag_actual = soup.select_one('.current-price span, [itemprop="price"]')
-        if tag_actual:
-            texto_actual = tag_actual.get_text()
-            match = re.search(r'\d+[.,]\d+', texto_actual)
-            if match: precio_rebajado = match.group().replace(',', '.')
-
-        # Buscamos el precio viejo (el que está tachado: 200,00 €)
-        tag_viejo = soup.select_one('.regular-price')
-        if tag_viejo:
-            texto_viejo = tag_viejo.get_text()
-            match = re.search(r'\d+[.,]\d+', texto_viejo)
-            if match: precio_original = match.group().replace(',', '.')
-        else:
-            # Si no hay precio viejo tachado, el original es el mismo que el actual
+        # Selectores para Atmosfera Sport (.regular-price-value, .was)
+        sel_original = [
+            '.regular-price-value', '.regular-price', '.was .price', 
+            '.price-item--regular', '.pdp-price_type_deleted', '.line-through'
+        ]
+        for sel in sel_original:
+            tag = soup.select_one(sel)
+            if tag:
+                texto = tag.get_text().replace(',', '.')
+                match = re.search(r'\d+[.]\d+', texto)
+                if match: 
+                    precio_original = match.group()
+                    break
+        
+        # Si no detectamos original, lo igualamos al rebajado
+        if precio_original == "0.00":
             precio_original = precio_rebajado
 
-        # 3. IMAGEN
+        # 4. IMAGEN (EL GRAN FALLO EN ATMOSFERA)
+        imagen = ""
+        # Buscamos primero en el meta (Atmosfera lo usa bien)
         meta_img = soup.find("meta", property="og:image")
-        imagen = meta_img.get("content") if meta_img else "https://via.placeholder.com/300"
+        if meta_img:
+            imagen = meta_img.get("content")
+        
+        if not imagen:
+            # Fallback a la imagen principal del producto
+            img_tag = soup.select_one('.product-main-image img, .pdp-main-image img')
+            if img_tag:
+                imagen = img_tag.get('src')
 
-        # Devolvemos: Nombre;Rebajado;Original;Imagen
+        # Limpiar URL de imagen
+        if imagen and imagen.startswith('//'):
+            imagen = "https:" + imagen
+
         print(f"{nombre};{precio_rebajado};{precio_original};{imagen}")
             
     except Exception as e:
-        print(f"Error;0.00;0.00;no_image.png")
+        print(f"Error;0.00;0.00;none")
 
 if __name__ == "__main__":
-    extraer_tienda_running()
+    extraer_datos()
