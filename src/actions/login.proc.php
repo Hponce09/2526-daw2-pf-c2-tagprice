@@ -38,7 +38,7 @@ if($user){
             header('Location:' . URL_BASE . 'views/panelAdmin.php');
             exit;
         }else{
-            header('Location:' . URL_BASE . 'views/dashboard.php');
+            header('Location:' . URL_BASE . 'index.php');
             exit;
         }
 

@@ -18,33 +18,38 @@ if(isset($_SESSION['errUserRegistre'])){
 }
 
 ?>
-<h2>iniciar</h2>
 
-<form action="<?=URL_BASE?>actions/login.proc.php" method="Post">
-    <label for="email">Email:</label>
-    <input type="email" name="usu_mail" id="email" required>
-    
-    <label for="password">Contraseña:</label>
-    <input type="password" name="usu_password" id="password" required>
-    
-    <button type="submit">Entrar</button>
+<div id="container-login">
+    <h2>Iniciar Sesión</h2>
+    <form action="<?=URL_BASE?>actions/login.proc.php" method="Post">
+        <label for="email">Email:</label>
+        <input type="email" name="usu_mail" id="email" required>
+        
+        <label for="password">Contraseña:</label>
+        <input type="password" name="usu_password" id="password" required>
+        
+        <button type="submit">Entrar</button>
+    </form>
+    <p>¿No tienes cuenta? <a href="#" id="btn-show-registre">Regístrate aquí</a></p>
+</div>
 
-</form>
+<div id="container-registre" style="display: none;">
+    <h2>Registro</h2>
+    <form action="<?=URL_BASE?>actions/registre.proc.php" method="Post">
+        <label for="name">Name:</label>
+        <input type="text" name="name" placeholder="Name" required>
 
-<h2>registro</h2>
+        <label for="email">Email:</label>
+        <input type="email" name="email" placeholder="Email" required>
 
-<form action="<?=URL_BASE?>actions/registre.proc.php" method="Post">
+        <label for="password">Contraseña:</label>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="password_confirm" placeholder="Confirma" required>
 
-    <label for="name">Name:</label>
-    <input type="text" name="name" placeholder="Name" required>
+        <button type="submit">Registrarse</button>
+    </form>
+    <p>¿Ya tienes cuenta? <a href="#" id="btn-show-login">Inicia sesión</a></p>
+</div>
 
-    <label for="email">Email:</label>
-    <input type="email" name="email" placeholder="Email" required>
+<script src="<?=URL_BASE?>public/js/login-switcher.js"></script>
 
-    <label for="password">Contraseña:</label>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="password" name="password_confirm" placeholder="Confirma" required>
-
-    <button type="submit">Entrar</button>
-
-</form>
