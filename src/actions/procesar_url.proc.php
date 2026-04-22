@@ -2,6 +2,11 @@
 session_start();
 require_once __DIR__ . '/../config/paths.php';
 
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+    header('Location: ' . URL_BASE . 'index.php');
+    exit; 
+}
+
 
 $whitelist = ['tiendarunning', 'atmosferasport'];
 $validacionTienda = false;
