@@ -15,16 +15,8 @@ $sqlCreateProduct = 'CREATE TABLE IF NOT EXISTS product (
     product_id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(255),
     imagen VARCHAR(255),
-    url_compra TEXT,
-    precio_actual DECIMAL(10,2)
-);';
-
-$sqlCreatesizes = 'CREATE TABLE IF NOT EXISTS sizes (
-    id_talla INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_product INTEGER NOT NULL,
-    talla_valor VARCHAR(20),
-    stock INTEGER DEFAULT 0,
-    FOREIGN KEY (id_product) REFERENCES product(product_id) ON DELETE CASCADE
+    url_compra TEXT NOT NULL,
+    precio_actual DECIMAL(10,2) NOT NULL
 );';
 
 $sqlCreatefavoritos = 'CREATE TABLE IF NOT EXISTS favorites (
@@ -40,7 +32,7 @@ $sqlCreateHistorialPrecios = 'CREATE TABLE IF NOT EXISTS price_history (
     id_historial INTEGER PRIMARY KEY AUTOINCREMENT,
     id_product INTEGER NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_registro DATE DEFAULT (CURRENT_DATE),
     FOREIGN KEY (id_product) REFERENCES product(product_id) ON DELETE CASCADE
 );';
 
@@ -55,14 +47,12 @@ if($db != null){
         $db->exec('PRAGMA foreign_keys = OFF;');
         $db->exec("DROP TABLE IF EXISTS price_history;");
         $db->exec("DROP TABLE IF EXISTS favorites;");
-        $db->exec("DROP TABLE IF EXISTS sizes;");
         $db->exec("DROP TABLE IF EXISTS product;");
         $db->exec("DROP TABLE IF EXISTS users;");
         $db->exec('PRAGMA foreign_keys = ON;');
 
         $db->exec($sqlCreateUser);
         $db->exec($sqlCreateProduct);
-        $db->exec($sqlCreatesizes);
         $db->exec($sqlCreatefavoritos);
         $db->exec($sqlCreateHistorialPrecios);
         

@@ -39,7 +39,8 @@ if(isset($_POST['url']) && !empty($_POST['url']) ){
                 'nombre' => $nombre,
                 'precioRebajado' => $rebajado,
                 'precio' => $original,
-                'imagen' => $imagen
+                'imagen' => $imagen,
+                'url' => $url
             ];
 
             header('Location: ' . URL_BASE . 'views/dashboard.php');
