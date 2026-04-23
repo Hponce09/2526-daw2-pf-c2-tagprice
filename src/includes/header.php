@@ -85,7 +85,7 @@ if (isset($_SESSION['rol_usu'])) {
                 <?php if (isset($_SESSION['autenticated']) && $_SESSION['autenticated'] === true): ?>
                     
                     <nav class="hidden md:flex items-center gap-8 mr-4">
-                        <a href="<?= URL_BASE ?>views/mis_favoritos.php" 
+                        <a href="<?= URL_BASE ?>views/favoritos.php" 
                             class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#8ca897] hover:text-white hover:bg-brand/10 text-[14px] font-bold uppercase tracking-widest transition-all no-underline group">
                             <svg class="w-5 h-5 opacity-70 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
