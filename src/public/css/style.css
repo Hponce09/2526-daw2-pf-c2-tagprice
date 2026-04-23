@@ -1,0 +1,25 @@
+    body {
+        background-color: #0a0f0d; /* El color surface que definimos */
+        color: #e2e8f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .btn-login-clip { 
+        clip-path: polygon(7px 0%, 100% 0%, calc(100% - 7px) 100%, 0% 100%); 
+    }
+
+    /* 3. Ajustes de scrollbar (Opcional, para que combine con el diseño oscuro) */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0a0f0d;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #1e2e24;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #34d371;
+    }
