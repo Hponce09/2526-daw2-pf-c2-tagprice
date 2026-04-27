@@ -42,22 +42,36 @@ $sqlInsertUsers = 'INSERT INTO users (usu_mail, usu_password, usu_name, usu_rol)
 ("user1@gmail.com", "$2a$12$Uz43.QaQePRviQGWolv8S.yNbGQyZ00CrbZ4VqWmLTKdwXCR.ShhK", "Juan Pérez", "user"),
 ("test_girl@hotmail.com", "$2a$12$5MtTooQ391AoM9zs41muvuxtQU9G.s7m98b5LARCN435nJblR0rRW", "María García", "user");';
 
+//datos de prueba
+$sqlInsertPrice = "INSERT INTO price_history (id_product, precio, fecha_registro) VALUES 
+(1, 120.50, '2026-04-20'),
+(1, 115.00, '2026-04-21'),
+(1, 118.00, '2026-04-22'),
+(1, 110.00, '2026-04-23'),
+(1, 105.00, '2026-04-24'),
+(1, 99.99, '2026-04-25'),
+(1, 102.00, '2026-04-26');";
+
 if($db != null){
     try {
-        $db->exec('PRAGMA foreign_keys = OFF;');
-        $db->exec("DROP TABLE IF EXISTS price_history;");
-        $db->exec("DROP TABLE IF EXISTS favorites;");
-        $db->exec("DROP TABLE IF EXISTS product;");
-        $db->exec("DROP TABLE IF EXISTS users;");
-        $db->exec('PRAGMA foreign_keys = ON;');
+        //$db->exec('PRAGMA foreign_keys = OFF;');
+        //$db->exec("DROP TABLE IF EXISTS price_history;");
+        //$db->exec("DROP TABLE IF EXISTS favorites;");
+        //$db->exec("DROP TABLE IF EXISTS product;");
+        //$db->exec("DROP TABLE IF EXISTS users;");
+        //$db->exec('PRAGMA foreign_keys = ON;');
 
-        $db->exec($sqlCreateUser);
-        $db->exec($sqlCreateProduct);
-        $db->exec($sqlCreatefavoritos);
-        $db->exec($sqlCreateHistorialPrecios);
+        //$db->exec($sqlCreateUser);
+        //$db->exec($sqlCreateProduct);
+        //$db->exec($sqlCreatefavoritos);
+        //$db->exec($sqlCreateHistorialPrecios);
         
         // Insertamos los usuarios iniciales
-        $db->exec($sqlInsertUsers);
+        //$db->exec($sqlInsertUsers);
+
+        //Insertamos datos de prueva 
+        $db->exec($sqlInsertPrice);
+
 
         echo 'Base de datos creada e inicializada con éxito ✅';
     } catch (PDOException $e) {

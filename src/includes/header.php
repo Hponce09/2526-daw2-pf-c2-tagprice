@@ -92,15 +92,6 @@ if (isset($_SESSION['rol_usu'])) {
                             </svg>
                             Favoritos
                         </a>
-                        <a href="<?= URL_BASE ?>views/historial.php" 
-                            class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#8ca897] hover:text-white hover:bg-brand/10 text-[14px] font-bold uppercase tracking-widest transition-all no-underline group">
-                            <svg class="w-5 h-5 opacity-70 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                                <path d="M3 3v5h5"></path>
-                                <path d="M12 7v5l4 2"></path>
-                            </svg>
-                            Historial
-                        </a>
                     </nav>
 
                     <div class="hidden md:block w-px h-10 bg-surface-border mx-8 opacity-50"></div>
