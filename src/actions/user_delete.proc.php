@@ -2,10 +2,10 @@
 session_start();
 include_once __DIR__ . '/../config/paths.php';
 include_once PATH_BASE . 'includes/db_connect.php';
-/*if(!isset($_SESSION['autenticated']) || $_SESSION['autenticated'] !== true){
+if(!isset($_SESSION['autenticated']) || $_SESSION['autenticated'] !== true){
     header('Location:' . URL_BASE . 'views/login.php');
     exit;
-}*/
+}
 
 if(isset($_REQUEST["id_user"])){
     $id = $_REQUEST["id_user"];

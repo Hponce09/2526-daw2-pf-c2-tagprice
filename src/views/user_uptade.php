@@ -10,10 +10,9 @@ if(!isset($_SESSION['autenticated']) || $_SESSION['autenticated'] !== true){
 include PATH_BASE .'includes/header.php';
 
 
-$id = $_REQUEST['id_user'] ?? null; // Capturamos el ID si existe
+$id = $_REQUEST['id_user'] ?? null; 
 $usuario = null;
 
-// Si hay ID, buscamos los datos actuales para rellenar el form
 if ($id) {
     $stmt = $db->prepare("SELECT * FROM users WHERE usu_id = ?");
     $stmt->execute([$id]);
