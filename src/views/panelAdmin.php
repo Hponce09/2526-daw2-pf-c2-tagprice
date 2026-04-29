@@ -9,6 +9,7 @@ if(!isset($_SESSION['autenticated']) || $_SESSION['autenticated'] !== true){
 }
 
 include PATH_BASE .'includes/header.php';
+include_once PATH_BASE . 'includes/db_connect.php'; 
 
 
 ?>
