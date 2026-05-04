@@ -7,6 +7,7 @@
     exit("ERROR: Este script solo puede ser ejecutado por el sistema (Cron Job).\n");
 }
 */
+include_once __DIR__ . '/../services/email.service.php';
 include_once __DIR__ . '/../config/paths.php';
 include_once PATH_BASE . 'includes/db_connect.php'; 
 
@@ -50,7 +51,7 @@ foreach ($productos as $pro) {
     if ($precioNuevo > 0) {
         
         // Solo guardamos si el precio ha cambiado
-        
+
             
             // A. Actualizamos la tabla principal
             $upd = $db->prepare("UPDATE product SET precio_actual = ? WHERE product_id = ?");
@@ -61,7 +62,33 @@ foreach ($productos as $pro) {
             $his->execute([$id, $precioNuevo]);
             
             echo "✅ ID $id: PRECIO CAMBIADO (De $precioViejo € a $precioNuevo €)\n";
-        
+
+        if ($precioNuevo < $precioViejo){
+            //enviamos mail??
+
+            $stmtEmail = $db->prepare("SELECT u.usu_mail, p.nombre 
+                                        FROM users u 
+                                        INNER JOIN favorites f ON u.usu_id = f.usu_id 
+                                        INNER JOIN product p ON f.product_id = p.product_id 
+                                        WHERE f.product_id = ?"
+            );
+            $stmtEmail->execute([$id]);
+            $interesados = $stmtEmail->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($interesados as $persona) {
+                $emailDestino = $persona['usu_mail'];
+                $nombreProducto = $persona['nombre'];
+                // Aquí llamarías a tu función de envío de mail
+                $enviado = enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $precioNuevo);
+
+                if ($enviado) {
+                    echo "✅ Mail enviado correctamente a: $emailDestino\n";
+                } else {
+                    echo "❌ Error al enviar mail a: $emailDestino (revisa logs)\n";
+                }
+            }
+
+        }
 
     } else {
         echo "❌ ID $id: Error en el rastreo (Salida inválida: '$salidaPython')\n";
@@ -69,6 +96,7 @@ foreach ($productos as $pro) {
 
     // Pequeño descanso para evitar bloqueos del servidor externo (Nike, etc.)
     sleep(1);
+    usleep(500000);
 }
 
 echo "--- RASTREO FINALIZADO ---\n\n";
