@@ -76,7 +76,14 @@ $mis_favoritos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
-                        <div class="relative z-10 ml-4">
+                        <div class="relative z-10 ml-4 flex items-center gap-3">
+                            <a href="<?=URL_BASE?>actions/remove_favorites.php?id=<?= $prod['product_id'] ?>" 
+                                class="flex flex-col items-center justify-center w-32 h-20 bg-surface-dark border border-surface-border rounded-xl hover:bg-red-500/10 hover:border-red-500 transition-all group/trash shadow-inner">
+                                    <span class="text-[10px] font-black uppercase tracking-tighter text-slate-400 group-hover/trash:text-red-500 mb-1">Dejar de seguir</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500/50 group-hover/trash:text-red-500 group-hover/trash:scale-110 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                            </a>
                             <a href="history_product.php?id=<?= $prod['product_id'] ?>" 
                                class="flex flex-col items-center justify-center w-32 h-20 bg-surface-dark border border-surface-border rounded-xl hover:bg-brand hover:border-brand transition-all group/btn shadow-inner">
                                 <span class="text-[10px] font-black uppercase tracking-tighter text-slate-400 group-hover/btn:text-surface mb-1">Ver Análisis</span>
