@@ -29,6 +29,11 @@ if (isset($_SESSION['rol_usu'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TagPrice | Sport Price Tracker</title>
 
+    <link rel="icon" type="image/png" href="<?=URL_BASE?>favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="<?=URL_BASE?>favicon/favicon.svg" />
+    <link rel="shortcut icon" href="<?=URL_BASE?>favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?=URL_BASE?>favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="<?=URL_BASE?>favicon/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
