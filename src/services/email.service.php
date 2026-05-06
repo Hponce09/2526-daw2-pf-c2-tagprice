@@ -9,10 +9,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /**
  * Envía una alerta de bajada de precio
  */
-function enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $precioNuevo) {
+function enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $precioNuevo,$urlProducto) {
     $mail = new PHPMailer(true);
 
     try {
+        $mail->CharSet = 'UTF-8'; 
+        $mail->Encoding = 'base64';
         // Configuración Servidor
         $mail->isSMTP();
         $mail->Host       = 'sandbox.smtp.mailtrap.io';
@@ -38,7 +40,7 @@ function enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $preci
                     Antes: <span style='text-decoration: line-through; color: #e74c3c;'>$precioViejo €</span><br>
                     <b>Ahora: <span style='color: #2ecc71;'>$precioNuevo €</span></b>
                 </p>
-                <a href='#' style='display: inline-block; padding: 10px 20px; background-color: #2ecc71; color: white; text-decoration: none; border-radius: 5px;'>Ver producto</a>
+                <a href='$urlProducto' style='display: inline-block; padding: 10px 20px; background-color: #2ecc71; color: white; text-decoration: none; border-radius: 5px;'>Ver producto</a>
             </div>
         ";
 

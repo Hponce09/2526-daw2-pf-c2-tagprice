@@ -66,7 +66,7 @@ foreach ($productos as $pro) {
         if ($precioNuevo < $precioViejo){
             //enviamos mail??
 
-            $stmtEmail = $db->prepare("SELECT u.usu_mail, p.nombre 
+            $stmtEmail = $db->prepare("SELECT u.usu_mail, p.nombre, p.url_compra 
                                         FROM users u 
                                         INNER JOIN favorites f ON u.usu_id = f.usu_id 
                                         INNER JOIN product p ON f.product_id = p.product_id 
@@ -78,8 +78,9 @@ foreach ($productos as $pro) {
             foreach ($interesados as $persona) {
                 $emailDestino = $persona['usu_mail'];
                 $nombreProducto = $persona['nombre'];
+                $url_producto = $persona['url_compra'];
                 // Aquí llamarías a tu función de envío de mail
-                $enviado = enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $precioNuevo);
+                $enviado = enviarAlertaPrecio($emailDestino, $nombreProducto, $precioViejo, $precioNuevo, $url_producto);
 
                 if ($enviado) {
                     echo "✅ Mail enviado correctamente a: $emailDestino\n";
