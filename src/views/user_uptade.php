@@ -105,3 +105,7 @@ if ($id) {
         </div>
     </div>
 </main>
+
+<?php
+include PATH_BASE .'includes/footer.html';
+?>

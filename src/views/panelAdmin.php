@@ -120,3 +120,5 @@ $sql = $db->prepare("SELECT usu_id, usu_mail, usu_name, usu_rol FROM users");
         </div>
     </div>
 </main>
+
+<?php include PATH_BASE .'includes/footer.html'; ?>

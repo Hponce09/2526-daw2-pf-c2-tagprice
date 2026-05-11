@@ -8,6 +8,13 @@ if(!isset($_SESSION['autenticated']) || $_SESSION['autenticated'] !== true){
     exit;
 }
 
+$mensaje = $_SESSION['errorUrl'] ?? null;
+$tipo = $_SESSION['tipo_mensaje'] ?? null;
+if($mensaje !== null){
+    unset($_SESSION['errorUrl']);
+    unset($_SESSION['tipo_mensaje']);
+}
+
 include PATH_BASE .'includes/header.php';
 
 $usu_id = $_SESSION['id_user'];
@@ -98,3 +105,7 @@ $mis_favoritos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 </main>
+
+<?php
+include PATH_BASE .'includes/footer.html';
+?>

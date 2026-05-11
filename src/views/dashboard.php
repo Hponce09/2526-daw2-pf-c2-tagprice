@@ -81,5 +81,6 @@ if(isset($_SESSION['producto'])){
 
     <?php
 }
+include PATH_BASE .'includes/footer.html';
 
 ?>

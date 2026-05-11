@@ -76,3 +76,8 @@ if ($errorUrl) {
         </form>
     </div>
 </main>
+
+<?php
+include PATH_BASE .'includes/footer.html';
+
+?>

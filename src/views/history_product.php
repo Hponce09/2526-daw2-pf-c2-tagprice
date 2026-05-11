@@ -123,3 +123,8 @@ fetch(`../api/get_history.php?id=${productId}`)
         });
     });
 </script>
+
+<?php
+include PATH_BASE .'includes/footer.html';
+
+?>
